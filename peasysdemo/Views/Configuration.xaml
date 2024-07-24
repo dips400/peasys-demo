@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="peasysdemo.Views.Configuration">
+
+        <Border  Stroke="#DCDCDC" StrokeThickness="2" BackgroundColor="White"  HorizontalOptions="Center" Margin="25, 25">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="10,10,10,10"/>
+        </Border.StrokeShape>
+        <VerticalStackLayout Padding="20">
+            <Label Text="Panneau de configuration" FontSize="42" FontAttributes="Bold"/>
+            <VerticalStackLayout Padding="15" Spacing="8" >
+                <Label Text="Serveur" FontSize="34" TextColor="{StaticResource Gray500}"/>
+                <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray200}"/>
+                <HorizontalStackLayout Spacing="40">
+                    <VerticalStackLayout>
+                        <Label x:Name="ServerName" Text="Nom du serveur : DIPS01"/>
+                        <Label x:Name="ServerIp" Text="Adress IP : 154.124.12.47"/>
+                        <Label Text="Version du sous-sytème : V7R3"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout>
+                        <Label Text="Numéro de série : 546156"/>
+                        <Label Text="Numéro de modèle : 48"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout Padding="15" Spacing="8">
+                    <Label Text="Sous-système Peasys" FontSize="34" TextColor="{StaticResource Gray500}"/>
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray200}"/>
+
+                    <HorizontalStackLayout Spacing="40">
+                        <VerticalStackLayout>
+                            <Label x:Name="ConnexionProfil" Text="Profil de connexion : PEASYS"/>
+                            <Label Text="Actif depuis : 2024-04-17 11:23:27"/>
+                            <Label Text="Job actifs : " />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout>
+                            <Label Text="Nom du pool mémoire : *BASE"/>
+                            <Label Text="ID de pool : 2"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+
+                <Border  Stroke="#DCDCDC" StrokeThickness="2" BackgroundColor="White">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10,10,10,10"/>
+                    </Border.StrokeShape>
+
+                    <ScrollView HeightRequest="100">
+                        <StackLayout>
+
+                            <Label x:Name="ErrorMessage" IsVisible="False"/>
+                            <CollectionView 
+                            ItemsSource="{Binding Jobs}" SelectionMode="Single"
+                            Margin="5" VerticalOptions="StartAndExpand" MaximumHeightRequest="520">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+
+                                <CollectionView.Header>
+                                    <Grid Padding="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Column="0" Text="Name" FontAttributes="Bold" />
+                                        <Label Grid.Column="1" Text="User" FontAttributes="Bold" />
+                                        <Label Grid.Column="2" Text="Numéro" FontAttributes="Bold" />
+                                        <Label Grid.Column="3" Text="Status" FontAttributes="Bold" />
+                                        <Label Grid.Column="4" Text="Type" FontAttributes="Bold" />
+                                        <Label Grid.Column="5" Text="Date lancement" FontAttributes="Bold" />
+                                        <Label Grid.Column="6" Text="Priorité" FontAttributes="Bold" />
+                                    </Grid>
+                                </CollectionView.Header>
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ScrollView VerticalOptions="StartAndExpand">
+                                            <Grid Padding="8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Grid.Column="0" Text="{Binding Name}" />
+                                                <Label Grid.Column="1" Text="{Binding User}" />
+                                                <Label Grid.Column="2" Text="{Binding Number}" />
+                                                <Label Grid.Column="3" Text="{Binding Status}" />
+                                                <Label Grid.Column="4" Text="{Binding Type}" />
+                                                <Label Grid.Column="5" Text="{Binding StartDate, StringFormat='{0:MM/dd/yyyy}'}" />
+                                                <Label Grid.Column="6" Text="{Binding Priority}" />
+                                            </Grid>
+                                        </ScrollView>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                    </ScrollView>
+                </Border>
+            </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+</ContentPage>

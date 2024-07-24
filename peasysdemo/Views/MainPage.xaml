@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="peasysdemo.MainPage"
+             x:Name="ClientsPage">
+
+    <ScrollView  >
+        <Border  Stroke="#DCDCDC" StrokeThickness="2" BackgroundColor="White" Margin="25, 25" HorizontalOptions="Center">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10,10,10,10" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout>
+                <Border  Stroke="#DCDCDC" StrokeThickness="2" Margin="15">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10,10,10,10" />
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout BackgroundColor="{StaticResource Gray600}" Padding="15">
+                        <Grid 
+                         ColumnDefinitions="10*, 2*">
+                            <SearchBar x:Name="SearchClientName" Grid.Column="0" 
+                                Placeholder="Rechercher une société" HorizontalOptions="FillAndExpand"
+                                TextChanged="HandleClientSearch" WidthRequest="240" CharacterSpacing="-0.5"
+                                       ToolTipProperties.Text="Filtrer par nom de société"/>
+                            <Button Grid.Column="1" Text="Ajouter un client" Clicked="ShowNewClientForm" HorizontalOptions="EndAndExpand"/>
+                        </Grid>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border Stroke="#DCDCDC" StrokeThickness="2" Margin="15,0" x:Name="NewClientForm" IsVisible="False">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10,10,10,10" />
+                    </Border.StrokeShape>
+                    <Grid BackgroundColor="{StaticResource Gray600}" Padding="10" ColumnDefinitions="*,*,*,*,*,Auto">
+                        <Entry x:Name="ClientName" Grid.Column="0" Placeholder="Société" HorizontalOptions="FillAndExpand"/>
+                        <Entry x:Name="ClientCodeId" Grid.Column="1" Placeholder="Code ID" HorizontalOptions="FillAndExpand"/>
+                        <Entry x:Name="ClientDescription" Grid.Column="2" Placeholder="Description" HorizontalOptions="FillAndExpand"/>
+                        <Picker 
+                            x:Name="ClientCountryCode" Grid.Column="3" BackgroundColor="White" 
+                            SelectedIndex="0" TextColor="Black" > 
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>DE</x:String>
+                                    <x:String>FR</x:String>
+                                    <x:String>UK</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                        <Entry x:Name="ClientSiret" Grid.Column="4" Placeholder="Siret" HorizontalOptions="FillAndExpand"/>
+                        <Button Grid.Column="5" Text="+" Clicked="AddNewClient"/>
+                    </Grid>
+                </Border>
+
+                <CollectionView x:Name="CollectionClients" ItemsSource="{Binding Clients}" SelectionMode="Single" VerticalOptions="StartAndExpand" >
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.Header>
+                        <VerticalStackLayout>
+                            <Grid Padding="20,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="4*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Column="0" Text="Société" FontAttributes="Bold" />
+                                <Label 
+                                    Grid.Column="1" Text="Code ID" 
+                                    FontAttributes="Bold" x:Name="CodeId"
+                                    ToolTipProperties.Text="Trier par code ID">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.FilterData, Source={x:Reference ClientsPage}}" 
+                                            CommandParameter="{Binding Text, Source={x:Reference CodeId}}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label 
+                                    Grid.Column="2" Text="Description" 
+                                    FontAttributes="Bold" x:Name="Description"
+                                    ToolTipProperties.Text="Trier par Description">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.FilterData, Source={x:Reference ClientsPage}}" 
+                                            CommandParameter="{Binding Text, Source={x:Reference Description}}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label 
+                                    Grid.Column="3" Text="Code Pays" 
+                                    FontAttributes="Bold" x:Name="CountryCode"
+                                    ToolTipProperties.Text="Trier par code pays">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding BindingContext.FilterData, Source={x:Reference ClientsPage}}" 
+                                            CommandParameter="{Binding Text, Source={x:Reference CountryCode}}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label Grid.Column="4" Text="Siret" FontAttributes="Bold" />
+                                <Image 
+                                    Grid.Column="5" Source="excel.png" HeightRequest="20" 
+                                    WidthRequest="40" BackgroundColor="White" ToolTipProperties.Text="Exporter ce tableau dans excel">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                        Command="{Binding BindingContext.ExportExcel, Source={x:Reference ClientsPage}}" 
+                                        CommandParameter="{Binding .}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Grid>
+                            
+                            <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray200}" Margin="20,0"/>
+                        </VerticalStackLayout>
+                    </CollectionView.Header>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="20,5">
+                                <FlyoutBase.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem IconImageSource="effacer.png"
+                                                        Text="Supprimer le client"
+                                                        Clicked="RemoveClient"/>
+                                    </MenuFlyout>
+                                </FlyoutBase.ContextFlyout>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="0.5*" />
+                                <ColumnDefinition Width="4*" />
+                                <ColumnDefinition Width="0.5*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Column="0" Text="{Binding Name}" HorizontalOptions="StartAndExpand"/>
+                                <Label Grid.Column="1" Text="{Binding CodeId}" />
+                                <Label Grid.Column="2" Text="{Binding Description}" />
+                                <Label Grid.Column="3" Text="{Binding CountryCode}" />
+                                <Label Grid.Column="4" Text="{Binding Siret}" />
+
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroupList>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal"/>
+                                            <VisualState x:Name="Selected">
+                                                 <VisualState.Setters>
+                                                    <Setter Property="BackgroundColor" Value="lightGray"/>
+                                                 </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateGroupList>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </Border>
+    </ScrollView>
+
+</ContentPage>

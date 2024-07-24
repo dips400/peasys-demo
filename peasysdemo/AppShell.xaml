@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="peasysdemo.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:peasysdemo"
+    Shell.FlyoutBehavior="Disabled"
+    Title="peasysdemo">
+
+ 
+
+    <TabBar>
+        
+        <Tab Title="Clients"
+            Icon="monkey.png">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}" Route="Clients"/>
+        </Tab>
+        <Tab Title="Ventes"
+        Icon="paw.png">
+            <ShellContent ContentTemplate="{DataTemplate local:Views.Sales}" Route="Sales"/>
+        </Tab>
+        <Tab Title="Configuration"
+    Icon="monkey.png">
+            <ShellContent ContentTemplate="{DataTemplate local:Views.Configuration}" Route="Configuration"/>
+        </Tab>
+    </TabBar>
+
+</Shell>
