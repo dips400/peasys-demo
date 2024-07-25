@@ -100,9 +100,9 @@ public partial class Sales : ContentPage
         {
             Label = group.First().Name,
             ValueLabel = group.Select(s => s.Sales).Sum().ToString(),
-            Color = COLORS[0]
+            Color = COLORS[index % COLORS.Length]
         }
-        );
+        ).Take(5);
         entriesRadialChart = entriesRadialChart.Prepend(new ChartEntry(products.Select(p => p.Sales).Sum())
         {
             Label = "Total",

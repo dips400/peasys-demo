@@ -23,7 +23,7 @@ public partial class Configuration : ContentPage
             ServerName.Text = $"Nom du serveur : {_connectionService.Connexion.PartitionName}";
             ServerIp.Text = $"Adress IP : {_connectionService.Connexion.IpAdress}";
 
-            PeaSelectResponse jobResponse = _connectionService.Connexion.ExecuteSelect("SELECT JOB_NAME_SHORT, JOB_USER, JOB_NUMBER, JOB_TYPE, JOB_STATUS, RUN_PRIORITY FROM TABLE (QSYS2.ACTIVE_JOB_INFO(SUBSYSTEM_LIST_FILTER => 'DIPSMG')) X");
+            PeaSelectResponse jobResponse = _connectionService.Connexion.ExecuteSelect("SELECT JOB_NAME_SHORT, JOB_USER, JOB_NUMBER, JOB_TYPE, JOB_STATUS, RUN_PRIORITY FROM TABLE (QSYS2.ACTIVE_JOB_INFO(SUBSYSTEM_LIST_FILTER => 'PEADEMO')) X");
 
             List<Job> jobs = [];
             if (jobResponse.HasSucceeded)
@@ -37,7 +37,6 @@ public partial class Configuration : ContentPage
                         Number = jobResponse.Result["job_number"][i],
                         Status = jobResponse.Result["job_status"][i],
                         Type = jobResponse.Result["job_type"][i],
-                        //StartDate = jobResponse.Result["job_name_short"][i], 
                         Priority = jobResponse.Result["run_priority"][i]
                     });
                 }
